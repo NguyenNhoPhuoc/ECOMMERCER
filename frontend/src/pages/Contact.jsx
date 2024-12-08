@@ -5,7 +5,7 @@ const Contact = () => {
     return (
         <div>
             <div className='text-center text-2xl pt-10 border-t'>
-                <Title text1={'LIÊN HỆ'} text2={'CHÚNG TÔI hehehe'} />
+                <Title text1={'LIÊN HỆ'} text2={'CHÚNG TÔI'} />
             </div>
             <div className='my-10 flex flex-col justify-center md:flex-row gap-10 mb-28'>
                 <img className='w-1/2' src={assets.contact_img} alt="" />
