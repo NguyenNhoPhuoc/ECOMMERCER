@@ -12,7 +12,7 @@ const Collection = () => {
     const [subCategory,setSubCategory] =useState([])
     const [sortType,setSortType] = useState('default')
 
-
+    
     const toggleCategory = (e) =>{
         if(category.includes(e.target.value)){
             setCategory(prev=>prev.filter(item => item !=e.target.value))
@@ -35,7 +35,16 @@ const Collection = () => {
         let productsCopy = products.slice();
         
         if(showSearch && search) {
-            productsCopy = productsCopy.filter(item=>item.name.toLowerCase().includes(search.toLowerCase()))
+            const removeVneseTones = (str) => {
+                return str
+                .normalize("NFD") // Chuẩn hóa Unicode để tách dấu
+                .replace(/[\u0300-\u036f]/g, "") // Loại bỏ dấu
+                .replace(/đ/g, "d") // Thay thế 'đ' thành 'd'
+                .replace(/Đ/g, "D") // Thay thế 'Đ' thành 'D'
+                .toLowerCase(); // Chuyển thành chữ thường
+            }
+            const normalizedSearch = removeVneseTones(search.trim());
+            productsCopy = productsCopy.filter(item=>removeVneseTones(item.name).includes(normalizedSearch))
         }
 
         if(category.length > 0) {
