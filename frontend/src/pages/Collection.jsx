@@ -37,11 +37,11 @@ const Collection = () => {
         if(showSearch && search) {
             const removeVneseTones = (str) => {
                 return str
-                .normalize("NFD") // Chuẩn hóa Unicode để tách dấu
-                .replace(/[\u0300-\u036f]/g, "") // Loại bỏ dấu
-                .replace(/đ/g, "d") // Thay thế 'đ' thành 'd'
-                .replace(/Đ/g, "D") // Thay thế 'Đ' thành 'D'
-                .toLowerCase(); // Chuyển thành chữ thường
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/đ/g, "d")
+                .replace(/Đ/g, "D")
+                .toLowerCase();
             }
             const normalizedSearch = removeVneseTones(search.trim());
             productsCopy = productsCopy.filter(item=>removeVneseTones(item.name).includes(normalizedSearch))
