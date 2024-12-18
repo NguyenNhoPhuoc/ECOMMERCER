@@ -14,7 +14,7 @@ const ShopContextProvider = (props) => {
     const [cartItem,setCartItem]=useState({})
     const navigate = useNavigate();
     const [token,setToken] = useState('')
-    const backendURL="https://ecommerce-backend-r66i.onrender.com"
+    const backendURL= import.meta.env.VITE_BACKEND_URL || "https://ecommerce-backend-r66i.onrender.com"
 
     const addToCart = async (itemId,size) => {
         if(!size){
