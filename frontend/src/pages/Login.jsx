@@ -14,7 +14,7 @@ const Login = () => {
         event.preventDefault();
         try {
             if(currentState === 'Đăng Ký'){
-                const response = await axios.post("http://localhost:4000/api/user/register",{email,password,name})
+                const response = await axios.post(backendURL+"/api/user/register",{email,password,name})
                 if(response.data.success) {
                     setToken(response.data.token)
                     toast.success(response.data.message)
@@ -23,7 +23,7 @@ const Login = () => {
                 }
                 
             } else {
-                const response = await axios.post("http://localhost:4000/api/user/login",{email,password})
+                const response = await axios.post(backendURL+"/api/user/login",{email,password})
                 if(response.data.success){
                     setToken(response.data.token)
                     toast.success(response.data.message)
