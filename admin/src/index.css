@@ -2,3 +2,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+*{
+    font-family: Roboto;
+}
+
+select,input,textarea {
+    border: 1px;
+    outline-color: green;
+    border-radius: 4px;
+}
+.active {
+    background-color: rgb(199, 230, 201);
+    border-color: rgb(13, 58, 13);
+}
