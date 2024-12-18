@@ -14,9 +14,7 @@ const ShopContextProvider = (props) => {
     const [cartItem,setCartItem]=useState({})
     const navigate = useNavigate();
     const [token,setToken] = useState('')
-    const backendURL=import.meta.env.VITE_BACKEND_URL
-    const renderURL=import.meta.env.RENDER_BACKEND_URL
-
+    const backendURL= import.meta.env.VITE_BACKEND_URL || "https://ecommerce-backend-r66i.onrender.com"
     const addToCart = async (itemId,size) => {
         if(!size){
             toast("Vui lòng chọn kích cỡ")
