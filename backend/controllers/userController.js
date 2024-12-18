@@ -13,15 +13,15 @@ const loginUser = async (req,res) => {
         const user = await userModel.findOne({email});
         
         if(!user){
-            return res.json({success:false,message:"User doesn't exists"});
+            return res.json({success:false,message:"Email không tồn tại!"});
         }
 
         const isMatchPassword = await bcrypt.compare(password,user.password);
         if(isMatchPassword){
             const token = createToken(user._id)
-            res.json({success:true,token})
+            res.json({success:true,token,message:"Đăng nhập thành công!"})
         } else {
-            res.json({success:false,message:"Invalid password"})
+            res.json({success:false,message:"Sai mật khẩu"})
         }
     } catch (error) {
         console.log(error);
@@ -53,7 +53,7 @@ const registerUser = async (req,res)=> {
             })
             const user = await newUser.save()
             const token = createToken(user._id)
-            res.json({success:true,token})
+            res.json({success:true,token,message:"Đăng ký thành công!"})
     } catch (error) {
         console.log(error);
         res.json({success:false,message:error.message})

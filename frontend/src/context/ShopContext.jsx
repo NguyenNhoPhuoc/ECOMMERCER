@@ -13,6 +13,8 @@ const ShopContextProvider = (props) => {
     const [showSearch,setShowSearch] = useState(false)
     const [cartItem,setCartItem]=useState({})
     const navigate = useNavigate();
+    const [token,setToken] = useState('')
+    const backendURL=import.meta.env.VITE_BACKEND_URL
 
     const addToCart = async (itemId,size) => {
         if(!size){
@@ -74,7 +76,7 @@ const ShopContextProvider = (props) => {
         products,currency,delivery_fee,
         search,setSearch,showSearch,setShowSearch,
         cartItem,addToCart,getCartCount,updateQuantity,getCartAmount,
-        navigate
+        navigate,token,setToken,backendURL
     }
 
     return (

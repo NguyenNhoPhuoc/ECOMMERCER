@@ -4,6 +4,7 @@ import { assets } from '../assets/assets';
 import { ShopContext } from '../context/ShopContext';
 
 const Navbar = () => {
+    const {token} = useContext(ShopContext)
     const [visible,setVisible] =useState(false);
     const {setShowSearch,getCartCount} = useContext(ShopContext)
     return (
@@ -35,8 +36,8 @@ const Navbar = () => {
                     <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4 '>
                         <div className='flex flex-col gap-2 w-44 py-3 px-5 bg-slate-100 text-gray-500 rounded'>
                             <p className='transform transition duration-300 hover:translate-x-2 cursor-pointer hover:text-black'>HỒ SƠ CỦA TÔI</p>
-                            <p className='transform transition duration-300 hover:translate-x-2 cursor-pointer hover:text-black'>ĐƠN ĐẶT HÀNG</p>
-                            <p className='transform transition duration-300 hover:translate-x-2 cursor-pointer hover:text-black'>ĐĂNG XUẤT</p>
+                            <Link to='/orders'><p className='transform transition duration-300 hover:translate-x-2 cursor-pointer hover:text-black'>ĐƠN ĐẶT HÀNG</p></Link>
+                            <Link to='/login'> <p onClick={()=>localStorage.removeItem('token')} className='transform transition duration-300 hover:translate-x-2 cursor-pointer hover:text-black'>{localStorage.getItem('token') ? "ĐĂNG XUẤT" : "ĐĂNG NHẬP"}</p></Link>
                         </div>
                     </div>
                 </div>
