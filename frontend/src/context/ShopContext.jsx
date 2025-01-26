@@ -1,7 +1,7 @@
-import { createContext, useState } from "react";
+import axios from 'axios';
+import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { products } from "../assets/assets";
 
 export const ShopContext = createContext();
 
@@ -13,12 +13,13 @@ const ShopContextProvider = (props) => {
     const [showSearch,setShowSearch] = useState(false)
     const [cartItem,setCartItem]=useState({})
     const navigate = useNavigate();
+    const [products,setProducts] =  useState([])
     const [token,setToken] = useState('')
-    const backendURL= "https://ecommerce-backend-r66i.onrender.com" || import.meta.env.VITE_BACKEND_URL 
+    const backendURL= import.meta.env.VITE_BACKEND_URL || "https://ecommerce-backend-r66i.onrender.com" 
     const addToCart = async (itemId,size) => {
         if(!size){
             toast("Vui lòng chọn kích cỡ")
-            return
+            return;
         }
         let cartData = structuredClone(cartItem)
         if(cartData[itemId]){
@@ -32,8 +33,54 @@ const ShopContextProvider = (props) => {
             cartData[itemId][size]=1
         }
         setCartItem(cartData)
+        if(token){
+            try {
+                await axios.post(backendURL+'/api/cart/add',{itemId,size},{headers:{token}})
+                toast.success("Thêm thành công")
+                console.log("done");
+                
+            } catch (error) {
+                console.log(error);
+                toast.error(error.message)
+            }
+        }
     }
-    
+    const fetchAllProduct = async ()=> {
+        try {
+            const response = await axios.get(backendURL+'/api/product/list')
+            if(response.data.success){
+                setProducts(response.data.products)
+            } else {
+                toast.error()
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+    useEffect(()=>{
+        fetchAllProduct();
+    },[])
+    useEffect(()=>{
+        if(!token && localStorage.getItem('token')){
+            setToken(localStorage.getItem('token'))
+            getUserCart(localStorage.getItem('token'))
+        }
+    },[])
+    const getUserCart = async (token) =>{
+        try {
+            const response =await axios.post(backendURL+'/api/cart/get',{},{headers:{token}})
+            if(response.data.success){
+                console.log(response.data.cartData);
+                
+                setCartItem(response.data.cartData)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
     const getCartCount = () => {
         let totalCount =0;
         for(const items in cartItem){
@@ -43,7 +90,8 @@ const ShopContextProvider = (props) => {
                         totalCount += cartItem[items][item]
                     }
                 } catch (error) {
-                    
+                    console.log(error)
+                    toast.error(error.message)
                 }}
             }
         return totalCount
@@ -53,6 +101,14 @@ const ShopContextProvider = (props) => {
         let cartData = structuredClone(cartItem)
         cartData[itemId][size] = quantity
         setCartItem(cartData)
+        if(token) {
+            try {
+                await axios.post(backendURL+'/api/cart/update',{itemId,size,quantity},{headers:{token}})
+            } catch (error) {
+                console.log(error)
+                toast.error(error.message)
+            }
+        }
     }
 
     const getCartAmount = () => {
@@ -65,12 +121,16 @@ const ShopContextProvider = (props) => {
                         totalAmount += itemInfo.price * cartItem[items][item]
                     }
                 } catch (error) {
-                    
+                    console.log(error)
+                    toast.error(error.message)
                 }
             }
         }
         return totalAmount
     }
+
+
+
     const value = {
         products,currency,delivery_fee,
         search,setSearch,showSearch,setShowSearch,

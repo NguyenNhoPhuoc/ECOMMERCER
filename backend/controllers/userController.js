@@ -11,11 +11,9 @@ const loginUser = async (req,res) => {
     try {
         const {email,password}=req.body;
         const user = await userModel.findOne({email});
-        
         if(!user){
             return res.json({success:false,message:"Email không tồn tại!"});
         }
-
         const isMatchPassword = await bcrypt.compare(password,user.password);
         if(isMatchPassword){
             const token = createToken(user._id)

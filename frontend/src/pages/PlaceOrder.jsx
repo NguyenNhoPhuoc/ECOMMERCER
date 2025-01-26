@@ -4,9 +4,25 @@ import CartTotal from '../components/CartTotal';
 import Title from '../components/Title';
 import { ShopContext } from '../context/ShopContext';
 const PlaceOrder = () => {
-    const [selectedCity,setSelectCity] = useState("")
     const [method,setMethod] = useState('cod')
     const {navigate} =useContext(ShopContext) 
+    const [formdata, setFormData] = useState({
+        name: '',
+        phone: '',
+        email: '',
+        city: '',
+        district: '',
+        ward: '',
+    })
+    
+    const handleChange = (e) => {
+        setFormData({
+            ...formdata,
+            [e.target.name]: e.target.value
+        })
+    }
+
+
     const options = [
         { value: "danang", label: "Đà Nẵng" },
         { value: "hanoi", label: "Hà Nội" },
@@ -46,10 +62,9 @@ const PlaceOrder = () => {
                 <div className='text-xl sm:text-2xl my-3'>
                     <Title text1={'THÔNG TIN'} text2={'GIAO HÀNG'}/>
                 </div>
-                <input className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="text" placeholder='Nhập họ và tên'/>
-                <input className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="tel" placeholder='Nhập số điện thoại'/>
+                <input onChange={handleChange} name='name' value={formdata.name} className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="text" placeholder='Nhập họ và tên'/>
+                <input onChange={handleChange} name='phone' value={formdata.phone} className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="tel" placeholder='Nhập số điện thoại'/>
                 <input className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="email" placeholder='Nhập email'/>
-                <input className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="text" placeholder='Nhập họ và tên'/>
                     <select value={selectedCity} onChange={(e) => setSelectCity(e.target.value)} className='border py-1.5  border-gray-300 rounded px-3.5 outline-none' >
                         <option value="" >Chọn Tỉnh/Thành phố</option>
                         {options.map((option)=> (

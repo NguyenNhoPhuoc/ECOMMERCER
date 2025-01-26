@@ -7,9 +7,9 @@ const ProductItem = ({id,image,name,price}) => {
     return (
         <Link onClick={window.scrollTo(0,0)} className='cursor-pointer text-gray-700' to={`/product/${id}`}>
             <div className='overflow-hidden'>
-                <img className='hover:scale-110 transition ease-in-out' src={image[0]} alt=''/>
+                <img className='h-[250px] w-full object-cover hover:scale-110 transition ease-in-out' src={image[0]} alt=''/>
             </div>
-            <p className='pt-3 pb-1 text-sm'>{name}</p>
+            <p className='pt-3 pb-1 text-lg'>{name}</p>
             <p className='text-sm font-medium'>{currency}{price.toLocaleString('vi-VN')}</p>
         </Link>
     )

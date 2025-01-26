@@ -102,12 +102,12 @@ const Add = ({token}) => {
                 <div >
                     <p className='mb-2'>Loại Sản Phẩm</p>
                     <select onChange={(e)=>setSubCategory(e.target.value)} className='w-full px-3 py-2'>
-                        <option value="Topwear">Áo khoác</option>
+                        <option value="Topwear">Áo thun</option>
                         <option value="Bottomwear">Quần</option>
-                        <option value="Winterwear">Áo ấm</option>
+                        <option value="Winterwear">Áo khoác</option>
                     </select>
                 </div>
-                <div >
+                <div>
                     <p className='mb-2'>Giá Sản Phẩm</p>
                     <input onChange={(e)=>setPrice(e.target.value)} value={price} className='w-full px-3 py-2 sm:w-[120px]' type="Number" placeholder='Nhập giá'/>
                 </div>

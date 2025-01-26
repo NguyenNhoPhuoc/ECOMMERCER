@@ -108,13 +108,13 @@ const Collection = () => {
                     <p className='mb-3 text-sm font-medium'>THỂ LOẠI</p>
                     <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
                         <p className='flex gap-2'>
-                            <input className='w-3' type='checkbox' value={'Topwear'} onChange={tonggleSubCategory}/> Áo khoác
+                            <input className='w-3' type='checkbox' value={'Topwear'} onChange={tonggleSubCategory}/> Áo thun
                         </p>
                         <p className='flex gap-2'>
                             <input className='w-3' type='checkbox' value={'Bottomwear'} onChange={tonggleSubCategory}/> Quần
                         </p>
                         <p className='flex gap-2'>
-                            <input className='w-3' type='checkbox' value={'Winterwear'} onChange={tonggleSubCategory}/> Áo ấm
+                            <input className='w-3' type='checkbox' value={'Winterwear'} onChange={tonggleSubCategory}/> Áo khoác
                         </p>
                     </div>
                 </div>

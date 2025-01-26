@@ -8,6 +8,7 @@ import Add from './pages/Add'
 import List from './pages/List'
 import Orders from './pages/Orders'
 
+export const currency = '₫';
 export const backendUrl = import.meta.env.VITE_BACKEND_URL
 const App = () => {
   const [token,setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : '');
@@ -15,7 +16,7 @@ const App = () => {
     localStorage.setItem('token',token)
   },[token])
   return (
-    <div className='bg-gray-100 min-h-screen'>
+    <div className='bg-white-100 min-h-screen'>
         <ToastContainer/>
         {token === "" 
         ? <Login setToken={setToken}/>
