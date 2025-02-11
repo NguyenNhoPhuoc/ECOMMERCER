@@ -1,11 +1,13 @@
+import axios from 'axios';
 import React, { useContext, useState } from 'react';
+import { toast } from 'react-toastify';
 import { assets } from '../assets/assets';
 import CartTotal from '../components/CartTotal';
 import Title from '../components/Title';
 import { ShopContext } from '../context/ShopContext';
 const PlaceOrder = () => {
     const [method,setMethod] = useState('cod')
-    const {navigate} =useContext(ShopContext) 
+    const {navigate,backendURL,token,cartItem,setCartItem,getCartAmount,products,delivery_fee} =useContext(ShopContext) 
     const [formdata, setFormData] = useState({
         name: '',
         phone: '',
@@ -13,6 +15,8 @@ const PlaceOrder = () => {
         city: '',
         district: '',
         ward: '',
+        state: '',
+        specific_address: ''
     })
     
     const handleChange = (e) => {
@@ -22,6 +26,49 @@ const PlaceOrder = () => {
         })
     }
 
+    const onSubmitHandler = async(e) => {
+        e.preventDefault()
+        try {
+            let orderItems = []
+        for(const items in cartItem){
+            for(const item in cartItem[items]){
+                if(cartItem[items][item] > 0){
+                    const itemInfor = products.find((products=>products._id === items))
+                    if(itemInfor){
+                        itemInfor.size = item
+                        itemInfor.quantity = cartItem[items][item]
+                        orderItems.push(itemInfor)
+                    }
+                }
+            }
+        }
+        let orderData = {
+            address:formdata,
+            items:orderItems,
+            amount:getCartAmount() + delivery_fee
+        }
+        
+        switch(method){
+            case 'cod':
+                const response = await axios.post(backendURL+'/api/order/place',orderData,{headers:{token}})
+                console.log(response.data);
+                
+                if(response.data.success){
+                    setCartItem({})
+                    navigate('/orders')
+                } else {
+                    toast.error(response.data.message)
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const options = [
         { value: "danang", label: "Đà Nẵng" },
@@ -56,16 +103,16 @@ const PlaceOrder = () => {
         { value: "thanhhoa", label: "Thanh Hóa" },
     ];
     return (
-        <div className='flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t'>
+        <form onSubmit={onSubmitHandler} className='flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t'>
             {/* left site */}
             <div className='flex flex-col gap-4 w-full sm:max-w-[480px]'>
                 <div className='text-xl sm:text-2xl my-3'>
                     <Title text1={'THÔNG TIN'} text2={'GIAO HÀNG'}/>
                 </div>
-                <input onChange={handleChange} name='name' value={formdata.name} className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="text" placeholder='Nhập họ và tên'/>
-                <input onChange={handleChange} name='phone' value={formdata.phone} className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="tel" placeholder='Nhập số điện thoại'/>
-                <input className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="email" placeholder='Nhập email'/>
-                    <select value={selectedCity} onChange={(e) => setSelectCity(e.target.value)} className='border py-1.5  border-gray-300 rounded px-3.5 outline-none' >
+                <input required onChange={handleChange} name='name' value={formdata.name} className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="text" placeholder='Nhập họ và tên'/>
+                <input required onChange={handleChange} name='phone' value={formdata.phone} className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="tel" placeholder='Nhập số điện thoại'/>
+                <input required onChange={handleChange} name='email' value={formdata.email}  className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="email" placeholder='Nhập email'/>
+                    <select name="city" value={formdata.city} onChange={handleChange} className='border py-1.5  border-gray-300 rounded px-3.5 outline-none' >
                         <option value="" >Chọn Tỉnh/Thành phố</option>
                         {options.map((option)=> (
                             <option className='text-black min-h-[200px]' key={option.value} value={option.value}>
@@ -73,8 +120,9 @@ const PlaceOrder = () => {
                             </option>
                         ))}
                     </select>
-                    <input className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="text" placeholder='Nhập Quận/Huyện'/>
-                    <input className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="text" placeholder='Nhập Phường/Xã'/>
+                    <input required name='district' value={formdata.district} onChange={handleChange} className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="text" placeholder='Nhập Quận/Huyện'/>
+                    <input required name='ward' value={formdata.ward} onChange={handleChange} className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="text" placeholder='Nhập Phường/Xã'/>
+                    <input required name='specific_address' value={formdata.specific_address} onChange={handleChange} className='py-1.5 border border-gray-300 rounded px-3.5 outline-none' type="text" placeholder='Nhập địa chỉ cụ thể'/>
             </div>
             {/* right site */}
             <div className='mt-8 flex flex-col'>
@@ -106,9 +154,9 @@ const PlaceOrder = () => {
                 <div className='mt-8 min-w-80 border px-4 py-4 shadow-2xl'>
                     <CartTotal/>
                 </div>
-                <button onClick={()=>navigate('/orders')} className='hover:cursor-pointer text-2xl text-white my-4 py-2 w-full bg-[#98a77c]'>Thanh toán</button>
+                <button type='submit' onClick={console.log(formdata)} className='active:scale-110 hover:cursor-pointer hover:bg-green-700 text-2xl text-white my-4 py-2 w-full bg-[#98a77c]'>Thanh toán</button>
             </div>
-        </div>
+        </form>
     )
 }
 

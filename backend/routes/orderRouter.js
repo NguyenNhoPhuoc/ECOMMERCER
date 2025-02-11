@@ -13,6 +13,6 @@ orderRouter.post('/place',authUser,placeOrder)
 
 
 //user features
-orderRouter.get('/userorders',authUser,userOrders)
+orderRouter.post('/userorders',authUser,userOrders)
 
 export default orderRouter
