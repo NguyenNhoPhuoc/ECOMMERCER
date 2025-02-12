@@ -6,6 +6,7 @@ import { ShopContext } from '../context/ShopContext'
 const Orders = () => {
     const {backendURL,token,currency} = useContext(ShopContext)
     const [orderData,setOrderData] = useState([])
+    
     const fetchOrderData = async ()=> {
         try {
             if(!token){
@@ -38,6 +39,7 @@ const Orders = () => {
         useEffect(()=> {
             fetchOrderData()
         },[token])
+        const datetime = new Date()
     return (
         <div className='border-t pt-16'>
             <div className='text-2xl'>
@@ -57,13 +59,20 @@ const Orders = () => {
                                         <p className='border-r pr-2 '>Số lượng:{item.quantity}</p>
                                         <p>Size:{item.size}</p>
                                     </div>
-                                    <p className='mt-2'>Ngày đặt: <span className='text-gray-400'>{item.date}</span></p>
+                                    <p className='mt-2'>Ngày đặt: <span className='text-gray-400'>{new Date(item.date).toLocaleString('vi-VN', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            second: '2-digit',
+                                        })}</span></p>
                                 </div>
                             </div>
                             <div className='md:w-1/2 flex justify-between'>
                                 <div className='flex items-center gap-2'>
                                     <p className='min-w-2 h-2 rounded-full bg-green-500'></p>
-                                    <p className='text-sm md:text-base'>Đã giao hàng</p>
+                                    <p className='text-sm md:text-base'>{item.status}</p>
                                 </div>
                                 <button className=' hover:shadow-xl hover:bg-green-900 text-base py-2 px-4 border bg-green-700 text-white rounded-3xl font-sans'>Theo dõi đơn hàng</button>
                             </div>
