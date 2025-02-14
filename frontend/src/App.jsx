@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import ChatbotPopup from './components/ChatbotPopup'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
 import SearchBar from './components/SearchBar'
@@ -32,6 +33,7 @@ const App = () => {
             <Route path='/place-order' element={<PlaceOrder/>} />
             <Route path='/orders' element={<Orders/>} />
         </Routes>
+        <ChatbotPopup/>
         <Footer/>
     </div>
   )
